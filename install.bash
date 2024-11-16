@@ -5,6 +5,7 @@ SCRIPTS=(
   "install_docker.bash"
   "generate_env.bash"
   "generate_image.bash"
+  "configure_home_assistant.bash"
 )
 
 prefix="scripts"

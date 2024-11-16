@@ -1,4 +1,3 @@
-
 services:
   postgres:
     container_name: postgres
@@ -9,9 +8,9 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: homeassistant
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ${DATA_FOLDER}/postgres:/var/lib/postgresql/data
     networks:
       - homeassistant_network
 
@@ -27,24 +26,24 @@ services:
       INFLUXDB_USER: ${INFLUXDB_USER}
       INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
     volumes:
-      - ./data/influxdb:/var/lib/influxdb
+      - ${DATA_FOLDER}/influxdb:/var/lib/influxdb
     networks:
       - homeassistant_network
 
-  grafana:
-    restart: unless-stopped
-    depends_on:
-      - influxdb
-    image: grafana/grafana:main-ubuntu
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource
-    volumes:
-      - ./data/grafana:/var/lib/grafana
-    networks:
-      - homeassistant_network
+  # grafana:
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - influxdb
+  #   image: grafana/grafana:main-ubuntu
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource
+  #   volumes:
+  #     - ${DATA_FOLDER}/grafana:/var/lib/grafana
+  #   networks:
+  #     - homeassistant_network
       
 
   homeassistant:
@@ -60,7 +59,7 @@ services:
       - TZ=${TZ}
     command: [ "python", "-m", "homeassistant", "--config", "/config", "--log-rotate-days", '3' ]
     volumes:
-      - ./data/homeassistant:/config
+      - ${DATA_FOLDER}/home-assistant:/config
     ports:
       - "8123:8123"
     devices:
@@ -77,7 +76,7 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - ./data/letsencrypt/config:/config
+      - ${DATA_FOLDER}/letsencrypt/config:/config
     ports:
       - "80:80"
       - "443:443"
@@ -95,7 +94,7 @@ services:
     container_name: nodered
     image: nodered-home-assistant
     volumes:
-      - ./data/nodered/:/data
+      - ${DATA_FOLDER}/nodered/:/data
     ports:
       - "1880:1880"
     user: 'root'

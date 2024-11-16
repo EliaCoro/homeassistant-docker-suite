@@ -1,0 +1,35 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+panel_iframe:
+  portainer:
+    title: "Portainer"
+    url: "http://172.27.20.4:9000/#/containers"
+    icon: mdi:docker
+    require_admin: true
+
+# Database
+recorder:
+  db_url: !secret psql_string
+  db_retry_wait: 3
+  # exclude:
+  #   domains:
+  #     - automation
+  #     - updater
+  #   entity_globs:
+  #     - sensor.weather_*
+  #   entities:
+  #     - sun.sun 
+  #     - sensor.last_boot
+  #     - sensor.date
+  #   event_types:
+  #     - call_service
