@@ -19,7 +19,6 @@ set -o allexport
 source "$ENV_FILE"
 set +o allexport
 
-
 # Path to the template directory
 TEMPLATE_DIR="configuration/home-assistant"
 
@@ -32,18 +31,24 @@ if [[ ! -d $OUTPUT_DIR ]]; then
     print_status "Created output directory: $OUTPUT_DIR"
 fi
 
-# Process each template file
+# Process templates recursively
 print_status "Processing templates from directory: $TEMPLATE_DIR"
 
+# Find all files in the template directory and process them
+find "$TEMPLATE_DIR" -type f | while read -r TEMPLATE_FILE; do
+    # Calculate the relative path of the file
+    RELATIVE_PATH="${TEMPLATE_FILE#$TEMPLATE_DIR/}"
+    OUTPUT_FILE="$OUTPUT_DIR/$RELATIVE_PATH"
 
-# Process each template file
-for TEMPLATE_FILE in "$TEMPLATE_DIR"/*; do
-    TEMPLATE_NAME=$(basename "$TEMPLATE_FILE")
-    OUTPUT_FILE="$OUTPUT_DIR/$TEMPLATE_NAME"
+    # Ensure the output directory for the file exists
+    OUTPUT_SUBDIR=$(dirname "$OUTPUT_FILE")
+    if [[ ! -d $OUTPUT_SUBDIR ]]; then
+        mkdir -p "$OUTPUT_SUBDIR"
+        print_status "Created output subdirectory: $OUTPUT_SUBDIR"
+    fi
 
+    # Process the template
     print_status "Processing $TEMPLATE_FILE -> $OUTPUT_FILE..."
-
-    # Render the template
     envsubst < "$TEMPLATE_FILE" > "$OUTPUT_FILE"
 
     # Check if the rendering was successful
@@ -54,3 +59,5 @@ for TEMPLATE_FILE in "$TEMPLATE_DIR"/*; do
         exit 1
     fi
 done
+
+print_status "All templates processed successfully."

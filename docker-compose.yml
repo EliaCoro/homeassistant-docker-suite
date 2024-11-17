@@ -20,15 +20,21 @@ services:
     restart: unless-stopped
     ports:
       - "8086:8086"
-      - "8083:8083"
     environment:
       INFLUXDB_DB: ${INFLUXDB_DB}
-      INFLUXDB_USER: ${INFLUXDB_USER}
-      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USER}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET}
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_ADMIN_TOKEN}
+      TZ: ${TZ}      
     volumes:
-      - ${DATA_FOLDER}/influxdb:/var/lib/influxdb
+      - ${DATA_FOLDER}/influxdb/data:/var/lib/influxdb
+      - ${DATA_FOLDER}/influxdb/config/:/etc/influxdb2
     networks:
       - homeassistant_network
+      
 
   # grafana:
   #   restart: unless-stopped
@@ -55,7 +61,8 @@ services:
     restart: unless-stopped
     privileged: true
     environment:
-      - DB_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/homeassistant
+    # TODO: vedere se serve
+      - DB_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/homeassistant 
       - TZ=${TZ}
     command: [ "python", "-m", "homeassistant", "--config", "/config", "--log-rotate-days", '3' ]
     volumes:
@@ -69,26 +76,26 @@ services:
     networks:
       - homeassistant_network
 
-  letsencrypt:
-    container_name: lets-encrypt
-    image: linuxserver/letsencrypt:version-1.11.0
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    volumes:
-      - ${DATA_FOLDER}/letsencrypt/config:/config
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - PGID=1000
-      - PUID=1000
-      - EMAIL={email}
-      - URL={url}
-      - SUBDOMAINS=hass
-      - VALIDATION=http
-    networks:
-      - homeassistant_network
+  # letsencrypt:
+  #   container_name: lets-encrypt
+  #   image: linuxserver/letsencrypt:version-1.11.0
+  #   restart: unless-stopped
+  #   cap_add:
+  #     - NET_ADMIN
+  #   volumes:
+  #     - ${DATA_FOLDER}/letsencrypt/config:/config
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   environment:
+  #     - PGID=1000
+  #     - PUID=1000
+  #     - EMAIL={email}
+  #     - URL={url}
+  #     - SUBDOMAINS=hass
+  #     - VALIDATION=http
+  #   networks:
+  #     - homeassistant_network
 
   nodered:
     container_name: nodered
@@ -102,6 +109,12 @@ services:
       - TZ=${TZ}
     networks:
       - homeassistant_network
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8080:8080
 
 networks:
   homeassistant_network:

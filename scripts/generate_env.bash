@@ -55,7 +55,11 @@ while IFS= read -r line; do
 
   # If no input is given, use the default value
   if [[ -z "$input_value" ]]; then
-    input_value="$default_value"
+    if [[ "$default_value" == "randomString()" ]]; then
+      input_value=$(openssl rand -hex 16)
+    else
+      input_value="$default_value"
+    fi
   fi
 
   # Write the key-value pair to the .env file

@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace_dashboards",
+  "data": {
+    "items": [
+      {
+        "id": "influxdb",
+        "show_in_sidebar": true,
+        "icon": "mdi:database",
+        "title": "InfluxDB",
+        "require_admin": true,
+        "mode": "storage",
+        "url_path": "influxdb"
+      },
+      {
+        "id": "map",
+        "icon": "mdi:map",
+        "title": "Map",
+        "url_path": "map",
+        "show_in_sidebar": true,
+        "mode": "storage",
+        "require_admin": false
+      },
+      {
+        "id": "node_red",
+        "show_in_sidebar": true,
+        "icon": "mdi:home-automation",
+        "title": "Node Red",
+        "require_admin": true,
+        "mode": "storage",
+        "url_path": "node-red"
+      },
+      {
+        "id": "dashboard_portainer",
+        "show_in_sidebar": true,
+        "icon": "mdi:train-car-container",
+        "title": "Portainer",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "dashboard-portainer"
+      }
+    ]
+  }
+}
