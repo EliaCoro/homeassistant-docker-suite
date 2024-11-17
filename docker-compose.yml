@@ -134,23 +134,22 @@ services:
     tty: true
     networks:
       - homeassistant_network
-    
 
-
-  # zigbee2mqtt:
-  #   container_name: zigbee2mqtt
-  #   image: koenkk/zigbee2mqtt:1.41.0
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8099:8099/tcp"
-  #   environment:
-  #     - TZ=${TZ}
-  #   volumes:
-  #     - ${DATA_FOLDER}/zigbee2mqtt/data:/app/data
-  #     - ${DATA_FOLDER}/zigbee2mqtt/run/udev:/run/udev:ro
-  #   devices:
-  #     - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_eexxx52-if00-port0:/dev/ttyACM0
-
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt:1.41.0
+    restart: unless-stopped
+    ports:
+      - "8099:8099/tcp"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DATA_FOLDER}/zigbee2mqtt/data:/app/data
+      - ${DATA_FOLDER}/zigbee2mqtt/run/udev:/run/udev:ro
+    devices:
+      - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_eexxx52-if00-port0:/dev/ttyACM0
+    networks:
+      - homeassistant_network
 
   adminer:
     image: adminer
