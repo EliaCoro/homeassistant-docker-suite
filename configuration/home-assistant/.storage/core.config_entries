@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "minor_version": 4,
+  "key": "core.config_entries",
+  "data": {
+    "entries": [
+      {"created_at":"2024-11-17T14:13:17.373420+00:00","data":{},"disabled_by":null,"discovery_keys":{},"domain":"sun","entry_id":"01JCX7H1DXJ2TDGMN7KKNWP8DV","minor_version":1,"modified_at":"2024-11-17T14:13:17.373425+00:00","options":{},"pref_disable_new_entities":false,"pref_disable_polling":false,"source":"import","title":"Sun","unique_id":null,"version":1},
+      {"created_at":"2024-11-17T14:13:17.526916+00:00","data":{},"disabled_by":null,"discovery_keys":{},"domain":"go2rtc","entry_id":"01JCX7H1JPGW129NV7WY8MMG1E","minor_version":1,"modified_at":"2024-11-17T14:13:17.526921+00:00","options":{},"pref_disable_new_entities":false,"pref_disable_polling":false,"source":"system","title":"go2rtc","unique_id":null,"version":1},
+      {"created_at":"2024-11-17T14:13:28.344155+00:00","data":{},"disabled_by":null,"discovery_keys":{},"domain":"shopping_list","entry_id":"01JCX7HC4RN01XESP3SFVXM1KW","minor_version":1,"modified_at":"2024-11-17T14:13:28.344161+00:00","options":{},"pref_disable_new_entities":false,"pref_disable_polling":false,"source":"onboarding","title":"Shopping list","unique_id":"shopping_list","version":1},
+      {"created_at":"2024-11-17T14:13:28.356717+00:00","data":{"language":"en","tld":"com"},"disabled_by":null,"discovery_keys":{},"domain":"google_translate","entry_id":"01JCX7HC54KJXG1JETDP9QA7P4","minor_version":1,"modified_at":"2024-11-17T14:13:28.356721+00:00","options":{},"pref_disable_new_entities":false,"pref_disable_polling":false,"source":"onboarding","title":"Google Translate text-to-speech","unique_id":null,"version":1},
+      {"created_at":"2024-11-17T14:13:28.421647+00:00","data":{},"disabled_by":null,"discovery_keys":{},"domain":"radio_browser","entry_id":"01JCX7HC75NHQECQKWJBT6S75P","minor_version":1,"modified_at":"2024-11-17T14:13:28.421650+00:00","options":{},"pref_disable_new_entities":false,"pref_disable_polling":false,"source":"onboarding","title":"Radio Browser","unique_id":null,"version":1},
+      {"created_at":"2024-11-17T14:42:34.640683+00:00","data":{"broker":"mosquitto","discovery":true,"password":"85016b37af416c6d7f8c982e50cf6df9","port":1883,"username":"homeassistant"},"disabled_by":null,"discovery_keys":{},"domain":"mqtt","entry_id":"01JCX96NGGYCMH0C3VQKXVGTAJ","minor_version":1,"modified_at":"2024-11-17T14:42:34.640718+00:00","options":{},"pref_disable_new_entities":false,"pref_disable_polling":false,"source":"user","title":"mosquitto","unique_id":null,"version":1}
+    ]
+  }
+}

@@ -123,6 +123,7 @@ services:
     command: >
       /bin/sh -c "
       mosquitto_passwd -b -c /mosquitto/config/mqttuser ${MQTT_USER} ${MQTT_PASSWORD} &&
+      chmod 0700 /mosquitto/config/mqttuser &&
       /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
       "
     volumes:
@@ -131,6 +132,8 @@ services:
       - ${DATA_FOLDER}/mosquitto/log:/mosquitto/log
     stdin_open: true
     tty: true
+    networks:
+      - homeassistant_network
     
 
 
@@ -154,6 +157,8 @@ services:
     restart: unless-stopped
     ports:
       - 8080:8080
+    networks:
+      - homeassistant_network
 
 networks:
   homeassistant_network:
