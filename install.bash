@@ -6,6 +6,7 @@ SCRIPTS=(
   "generate_env.bash"
   "generate_image.bash"
   "configure_home_assistant.bash"
+  "configure_mosquitto.bash"
 )
 
 prefix="scripts"

@@ -110,6 +110,45 @@ services:
     networks:
       - homeassistant_network
 
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:2.0.20-openssl
+    restart: unless-stopped
+    ports:
+      - "1883:1883/tcp"
+    environment:
+      - TZ=${TZ}
+      - MQTT_USER=user
+      - MQTT_PASSWORD=qweqwe
+    command: >
+      /bin/sh -c "
+      mosquitto_passwd -b -c /mosquitto/config/mqttuser ${MQTT_USER} ${MQTT_PASSWORD} &&
+      /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
+      "
+    volumes:
+      - ${DATA_FOLDER}/mosquitto/config:/mosquitto/config
+      - ${DATA_FOLDER}/mosquitto/data:/mosquitto/data
+      - ${DATA_FOLDER}/mosquitto/log:/mosquitto/log
+    stdin_open: true
+    tty: true
+    
+
+
+  # zigbee2mqtt:
+  #   container_name: zigbee2mqtt
+  #   image: koenkk/zigbee2mqtt:1.41.0
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8099:8099/tcp"
+  #   environment:
+  #     - TZ=${TZ}
+  #   volumes:
+  #     - ${DATA_FOLDER}/zigbee2mqtt/data:/app/data
+  #     - ${DATA_FOLDER}/zigbee2mqtt/run/udev:/run/udev:ro
+  #   devices:
+  #     - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_eexxx52-if00-port0:/dev/ttyACM0
+
+
   adminer:
     image: adminer
     restart: unless-stopped

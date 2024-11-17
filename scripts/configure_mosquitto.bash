@@ -23,4 +23,4 @@ if [[ -z "$DATA_FOLDER" ]]; then
 fi
 
 # Call the process_templates function with parameters
-process_templates "configuration/home-assistant" "$DATA_FOLDER/home-assistant"
+process_templates "configuration/mosquitto" "$DATA_FOLDER/mosquitto"
