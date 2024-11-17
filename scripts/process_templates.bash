@@ -20,6 +20,7 @@ process_templates() {
     # Create the output directory if it doesn't exist
     if [[ ! -d $OUTPUT_DIR ]]; then
         mkdir -p "$OUTPUT_DIR"
+        sudo chmod 777 -R "$OUTPUT_DIR"
         print_status "Created output directory: $OUTPUT_DIR"
     fi
 
