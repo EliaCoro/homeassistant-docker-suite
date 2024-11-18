@@ -7,6 +7,7 @@ SCRIPTS=(
   "generate_image.bash"
   "configure_home_assistant.bash"
   "configure_mosquitto.bash"
+  "configure_zigbee2mqtt.bash"
 )
 
 prefix="scripts"
