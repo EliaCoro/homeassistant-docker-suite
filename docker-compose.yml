@@ -73,6 +73,14 @@ services:
       - /dev/ttyUSB0
       - /dev/ttyUSB1
       - /dev/ttyACM0
+    entrypoint: >
+      /bin/bash -c "
+      if [ ! -d /config/custom_components/hacs ]; then
+        echo 'Installing HACS...';
+        wget -O - https://get.hacs.xyz | bash -;
+      fi;
+      exec /init
+      "
     networks:
       - homeassistant_network
 

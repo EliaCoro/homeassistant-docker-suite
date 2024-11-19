@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace.dashboard_zigbee2mqtt",
+  "data": {
+    "config": {
+      "strategy": {
+        "type": "iframe",
+        "url": "http://100.123.113.3:8099"
+      }
+    }
+  }
+}

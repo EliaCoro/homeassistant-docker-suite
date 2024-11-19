@@ -39,6 +39,15 @@
         "require_admin": false,
         "mode": "storage",
         "url_path": "dashboard-portainer"
+      },
+      {
+        "id": "dashboard_zigbee2mqtt",
+        "show_in_sidebar": true,
+        "icon": "mdi:zigbee",
+        "title": "Zigbee2MQTT",
+        "require_admin": true,
+        "mode": "storage",
+        "url_path": "dashboard-zigbee2mqtt"
       }
     ]
   }
