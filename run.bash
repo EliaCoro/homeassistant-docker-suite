@@ -7,16 +7,6 @@ print_status() {
 
 source "scripts/functions/check_env.bash"
 
-# Check if .env file exists
-if [[ ! -f $ENV_FILE ]]; then
-    echo "[ERROR] .env file not found."
-    exit 1
-fi
-
-# Export variables from the .env file into the current shell environment
-set -o allexport
-source "$ENV_FILE"
-set +o allexport
 
 if [[ -z "$DATA_FOLDER" ]]; then
     echo "$DATA_FOLDER"
@@ -37,13 +27,23 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+service="--profile base "
+
+if [[ "$ZIGBEE" == "Y" ]]; then
+    service+="--profile zigbee "
+fi
+
+if [[ "$BACKUPS" == "Y" ]]; then
+    service+="--profile backups "
+fi
+
 # If the architecture is arm64 (ARM 64-bit), use the --platform flag
 if [[ "$arch" == "aarch64" ]]; then
     print_status "Architecture is ARM64. Starting containers with --platform linux/arm64/v8."
-    docker compose up --platform linux/arm64/v8
+    docker compose --platform linux/arm64/v8 $service up -d
 else
     print_status "Starting containers"
-    docker compose up
+    docker compose $service up -d
 fi
 
 # sleep 5

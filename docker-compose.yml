@@ -2,8 +2,7 @@ services:
   postgres:
     container_name: postgres
     image: postgres:12
-    profile:
-      - base
+    profiles: [base]
     restart: unless-stopped
     ports:
       - "5432:5432"
@@ -19,8 +18,7 @@ services:
   influxdb:
     container_name: influxdb
     image: influxdb:latest
-    profile:
-      - base
+    profiles: [base]
     restart: unless-stopped
     ports:
       - "8086:8086"
@@ -59,8 +57,7 @@ services:
   homeassistant:
     container_name: home-assistant
     image: homeassistant/home-assistant:latest
-    profile:
-      - base
+    profiles: [base]
     depends_on:
       - postgres
       - influxdb
@@ -114,8 +111,7 @@ services:
   nodered:
     container_name: nodered
     image: nodered-home-assistant
-    profile:
-      - zigbee
+    profiles: [zigbee]
     volumes:
       - ${DATA_FOLDER}/nodered/:/data
     ports:
@@ -129,8 +125,7 @@ services:
   mosquitto:
     container_name: mosquitto
     image: eclipse-mosquitto:2.0.20-openssl
-    profile:
-      - zigbee
+    profiles: [zigbee]
     restart: unless-stopped
     ports:
       - "1883:1883/tcp"
@@ -156,8 +151,7 @@ services:
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt:1.41.0
-    profile:
-      - zigbee
+    profiles: [zigbee]
     restart: unless-stopped
     ports:
       - "8099:8099/tcp"
