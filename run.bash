@@ -5,8 +5,7 @@ print_status() {
     echo "[STATUS] $1"
 }
 
-# Path to the .env file
-ENV_FILE=".env"
+source "scripts/functions/check_env.bash"
 
 # Check if .env file exists
 if [[ ! -f $ENV_FILE ]]; then

@@ -6,7 +6,7 @@
         "config": {
             "strategy": {
                 "type": "iframe",
-                "url": "http://$IP:8086"
+                "url": "http://$IP_DNS  :8086"
             }
         }
     }

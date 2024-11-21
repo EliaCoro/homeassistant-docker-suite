@@ -2,7 +2,9 @@
 
 # Function to print status messages
 print_status() {
-    echo "[STATUS] $1"
+    if [[ $verbose -eq 1 ]]; then
+        echo "[STATUS] $1"
+    fi
 }
 
 # Function to process templates recursively

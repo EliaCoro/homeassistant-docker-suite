@@ -66,4 +66,6 @@ while IFS= read -r line; do
   echo "$key=$input_value" >> .env
 done < scripts/.env.example
 
+source "./scripts/configure_services.bash"
+
 echo "The .env file has been successfully generated."

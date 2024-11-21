@@ -3,8 +3,8 @@
 # List of .bash files to execute
 SCRIPTS=(
   "install_docker.bash"
-  "generate_env.bash"
   "generate_image.bash"
+  "generate_env.bash"
   "configure_home_assistant.bash"
   "configure_mosquitto.bash"
   "configure_zigbee2mqtt.bash"
@@ -27,7 +27,6 @@ for script in "${SCRIPTS[@]}"; do
   fi
 
   # Execute the script (source it to preserve interactive behavior)
-  echo "Running '$file'..."
   source "$file"
 
   # Check if the script executed successfully

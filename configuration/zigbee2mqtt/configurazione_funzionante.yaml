@@ -1,7 +1,7 @@
 homeassistant: true
 frontend:
   port: 8099
-  url: 'http://$IP:8099'
+  url: 'http://$IP_DNS:8099'
 
 devices: devices.yaml
 groups: groups.yaml
