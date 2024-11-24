@@ -2,6 +2,7 @@ services:
   postgres:
     container_name: postgres
     image: postgres:12
+    profiles: [base]
     restart: unless-stopped
     ports:
       - "5432:5432"
@@ -16,19 +17,26 @@ services:
 
   influxdb:
     container_name: influxdb
-    image: influxdb:1.11.7
+    image: influxdb:latest
+    profiles: [base]
     restart: unless-stopped
     ports:
       - "8086:8086"
-      - "8083:8083"
     environment:
       INFLUXDB_DB: ${INFLUXDB_DB}
-      INFLUXDB_USER: ${INFLUXDB_USER}
-      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USER}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET}
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_ADMIN_TOKEN}
+      TZ: ${TZ}      
     volumes:
-      - ${DATA_FOLDER}/influxdb:/var/lib/influxdb
+      - ${DATA_FOLDER}/influxdb/data:/var/lib/influxdb
+      - ${DATA_FOLDER}/influxdb/config/:/etc/influxdb2
     networks:
       - homeassistant_network
+      
 
   # grafana:
   #   restart: unless-stopped
@@ -47,15 +55,17 @@ services:
       
 
   homeassistant:
+    container_name: home-assistant
+    image: homeassistant/home-assistant:latest
+    profiles: [base]
     depends_on:
       - postgres
       - influxdb
-    container_name: home-assistant
-    image: homeassistant/home-assistant:latest
     restart: unless-stopped
     privileged: true
     environment:
-      - DB_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/homeassistant
+    # TODO: vedere se serve
+      - DB_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/homeassistant 
       - TZ=${TZ}
     command: [ "python", "-m", "homeassistant", "--config", "/config", "--log-rotate-days", '3' ]
     volumes:
@@ -66,33 +76,42 @@ services:
       - /dev/ttyUSB0
       - /dev/ttyUSB1
       - /dev/ttyACM0
+    entrypoint: >
+      /bin/bash -c "
+      if [ ! -d /config/custom_components/hacs ]; then
+        echo 'Installing HACS...';
+        wget -O - https://get.hacs.xyz | bash -;
+      fi;
+      exec /init
+      "
     networks:
       - homeassistant_network
 
-  letsencrypt:
-    container_name: lets-encrypt
-    image: linuxserver/letsencrypt:version-1.11.0
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    volumes:
-      - ${DATA_FOLDER}/letsencrypt/config:/config
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - PGID=1000
-      - PUID=1000
-      - EMAIL={email}
-      - URL={url}
-      - SUBDOMAINS=hass
-      - VALIDATION=http
-    networks:
-      - homeassistant_network
+  # letsencrypt:
+  #   container_name: lets-encrypt
+  #   image: linuxserver/letsencrypt:version-1.11.0
+  #   restart: unless-stopped
+  #   cap_add:
+  #     - NET_ADMIN
+  #   volumes:
+  #     - ${DATA_FOLDER}/letsencrypt/config:/config
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   environment:
+  #     - PGID=1000
+  #     - PUID=1000
+  #     - EMAIL={email}
+  #     - URL={url}
+  #     - SUBDOMAINS=hass
+  #     - VALIDATION=http
+  #   networks:
+  #     - homeassistant_network
 
   nodered:
     container_name: nodered
     image: nodered-home-assistant
+    profiles: [zigbee]
     volumes:
       - ${DATA_FOLDER}/nodered/:/data
     ports:
@@ -100,6 +119,49 @@ services:
     user: 'root'
     environment:
       - TZ=${TZ}
+    networks:
+      - homeassistant_network
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:2.0.20-openssl
+    profiles: [zigbee]
+    restart: unless-stopped
+    ports:
+      - "1883:1883/tcp"
+    environment:
+      - TZ=${TZ}
+      - MQTT_USER=user
+      - MQTT_PASSWORD=qweqwe
+    command: >
+      /bin/sh -c "
+      mosquitto_passwd -b -c /mosquitto/config/mqttuser ${MQTT_USER} ${MQTT_PASSWORD} &&
+      chmod 0700 /mosquitto/config/mqttuser &&
+      /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
+      "
+    volumes:
+      - ${DATA_FOLDER}/mosquitto/config:/mosquitto/config
+      - ${DATA_FOLDER}/mosquitto/data:/mosquitto/data
+      - ${DATA_FOLDER}/mosquitto/log:/mosquitto/log
+    stdin_open: true
+    tty: true
+    networks:
+      - homeassistant_network
+
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt:1.41.0
+    profiles: [zigbee]
+    restart: unless-stopped
+    ports:
+      - "8099:8099/tcp"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DATA_FOLDER}/zigbee2mqtt:/app/data
+    devices:
+    #TODO: set with .env
+      - /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:/dev/ttyACM0
     networks:
       - homeassistant_network
 

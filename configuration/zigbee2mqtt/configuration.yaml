@@ -1,0 +1,30 @@
+homeassistant: true
+frontend:
+  port: 8099
+  url: 'http://$IP_DNS:8099'
+  token: $ZIGBEE2MQTT_TOKEN
+
+devices: devices.yaml
+groups: groups.yaml
+
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://mosquitto:1883
+  user: homeassistant
+  password: $MQTT_PASSWORD
+  client_id: zigbee
+
+permit_join: false
+
+serial:
+  port: /dev/ttyACM0
+  adapter: ember
+
+advanced:
+  pan_id: GENERATE
+  network_key: GENERATE
+  # Zigbee network - set channel to avoid interference with 2.4GHz WiFi
+  channel: 24
+
+device_options:
+  legacy: false
