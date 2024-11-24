@@ -24,12 +24,12 @@ echo "ZIGBEE=$zigbee" >> .env
 
 source "scripts/functions/check_env.bash"
 
-echo "Would you enable automatic backups with Rclone? (Y/n)"
-echo "Documentation: https://rclone.org/docs/"
-backups=$(ask_Y_N)
-echo "BACKUPS=$backups" >> .env
+# echo "Would you enable automatic backups with Rclone? (Y/n)"
+# echo "Documentation: https://rclone.org/docs/"
+# backups=$(ask_Y_N)
+# echo "BACKUPS=$backups" >> .env
 
 
-if [[ "$backups" == "Y" ]]; then
-  docker run -it --rm -v "$DATA_FOLDER/rclone/:/root/.config/rclone" rclone/rclone config
-fi
+# if [[ "$backups" == "Y" ]]; then
+#   docker run -it --rm -v "$DATA_FOLDER/rclone/:/root/.config/rclone" rclone/rclone config
+# fi
